@@ -8,6 +8,7 @@
     "start": "node -r dotenv/config src/index.js"
   },
   "dependencies": {
+    "d3-dsv": "^3.0.1",
     "dotenv": "^16.0.3",
     "puppeteer": "^19.5.2"
   }

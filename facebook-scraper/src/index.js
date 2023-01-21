@@ -1,4 +1,15 @@
 import puppeteer from 'puppeteer';
+import { csvFormatBody } from 'd3-dsv';
+import { writeFileSync, existsSync, mkdirSync } from 'fs';
+
+const OUT_DIR = 'dist';
+const CSV_HEADERS = [
+  'publish_time',
+  'top_level_post_id',
+  'actor_id',
+  'ent_attachement_type',
+  'text',
+];
 
 const groupId = process.argv[process.argv.length - 1];
 const facebookEmail = process.env.FACEBOOK_EMAIL;
@@ -11,11 +22,30 @@ if (!facebookEmail || !facebookPassword) {
 
 console.log(`Target group: ${groupId}`);
 
+// Prepare output file
+if (!existsSync(OUT_DIR)) {
+  mkdirSync(OUT_DIR);
+}
+
+const outputFile = `${OUT_DIR}/${new Date()
+  .toLocaleString('en', {
+    dateStyle: 'short',
+    timeStyle: 'medium',
+    hour12: false,
+  })
+  .replaceAll(':', '-')
+  .replaceAll('/', '-')
+  .replaceAll(', ', '_')}.csv`;
+
+console.log(`Writing to ${outputFile}`);
+
+writeFileSync(outputFile, CSV_HEADERS.join(','));
+
 (async () => {
   // Start puppeteer
   const browser = await puppeteer.launch({
     headless: false,
-    slowMo: 10,
+    slowMo: 5,
   });
 
   const page = await browser.newPage();
@@ -36,8 +66,7 @@ console.log(`Target group: ${groupId}`);
   await page.goto(`https://m.facebook.com/groups/${groupId}`);
 
   // Scrape group posts
-  const dataList = await page.evaluate(() => {
-    console.log('Evaluation start');
+  const posts = await page.evaluate(() => {
     const dataList = [];
 
     document
@@ -51,7 +80,6 @@ console.log(`Target group: ${groupId}`);
             ent_attachement_type,
             page_id,
             page_insights,
-            qid,
             top_level_post_id,
           } = JSON.parse(dataFt);
 
@@ -61,15 +89,12 @@ console.log(`Target group: ${groupId}`);
             .replace('… More', '');
 
           const postData = {
-            qid,
             top_level_post_id,
             ent_attachement_type,
             actor_id: page_insights[page_id]?.actor_id,
             publish_time: page_insights[page_id]?.post_context?.publish_time,
             text,
           };
-
-          console.log(postData);
 
           dataList.push(postData);
         }
@@ -80,7 +105,9 @@ console.log(`Target group: ${groupId}`);
     return dataList;
   });
 
-  console.log(dataList);
+  writeFileSync(outputFile, '\n' + csvFormatBody(posts, CSV_HEADERS), {
+    flag: 'a',
+  });
 
   await browser.close();
 })();
