@@ -8,7 +8,7 @@ import {
   Post,
 } from './actions.js';
 
-const OUT_DIR = 'dist';
+const OUT_DIR = 'out';
 const CSV_HEADERS: Array<keyof Post> = [
   'publish_time',
   'top_level_post_id',
