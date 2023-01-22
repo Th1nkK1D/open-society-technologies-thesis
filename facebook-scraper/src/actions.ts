@@ -44,25 +44,41 @@ export async function getPostsFromGroupTimeline(page: Page): Promise<Post[]> {
             top_level_post_id,
           } = JSON.parse(dataFt);
 
-          const text = [...article.querySelectorAll('.story_body_container p')]
-            .map((p) => p.textContent)
-            .join('\n')
-            .replace('… More', '');
+          const publish_time =
+            page_insights[page_id]?.post_context?.publish_time;
 
-          const postData = {
-            top_level_post_id,
-            ent_attachement_type,
-            actor_id: page_insights[page_id]?.actor_id,
-            publish_time: page_insights[page_id]?.post_context?.publish_time,
-            text,
-          };
+          if (publish_time) {
+            const text = [
+              ...article.querySelectorAll('.story_body_container p'),
+            ]
+              .map((p) => p.textContent)
+              .join('\n')
+              .replace('… More', '');
 
-          dataList.push(postData);
+            const postData = {
+              top_level_post_id,
+              ent_attachement_type,
+              actor_id: page_insights[page_id]?.actor_id,
+              publish_time: publish_time * 1000,
+              text,
+            };
+
+            dataList.push(postData);
+          }
         }
 
         article.remove();
       });
 
-    return dataList;
+    return dataList.sort((a, z) => z.publish_time - a.publish_time);
   });
+}
+
+export async function loadNextPostsFromTimeline(page: Page) {
+  await page.evaluate(() => {
+    document.documentElement.scrollTop = 0;
+    document.documentElement.scrollTop = document.documentElement.scrollHeight;
+  });
+
+  await page.waitForSelector('#m_group_stories_container article');
 }
