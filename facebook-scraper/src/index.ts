@@ -36,14 +36,14 @@ if (!existsSync(OUT_DIR)) {
   mkdirSync(OUT_DIR);
 }
 
-const outputFile = `${OUT_DIR}/${new Date()
+const outputFile = `${OUT_DIR}/${groupId}_${new Date()
   .toLocaleString('en', {
     dateStyle: 'short',
     timeStyle: 'medium',
     hour12: false,
   })
-  .replaceAll(':', '-')
-  .replaceAll('/', '-')
+  .replaceAll(':', '')
+  .replaceAll('/', '')
   .replaceAll(', ', '_')}.csv`;
 
 console.log(`Writing to ${outputFile}`);
@@ -65,7 +65,7 @@ writeFileSync(outputFile, CSV_HEADERS.join(','));
   const epochFrom = dateFrom.getTime();
   const epochTo = dateTo.getTime();
   let currentPagePostCount: number = 0;
-  let isStarted = false;
+  let total = 0;
 
   do {
     const posts = await getPostsFromGroupTimeline(page);
@@ -85,17 +85,17 @@ writeFileSync(outputFile, CSV_HEADERS.join(','));
         }
       );
 
-      isStarted = true;
+      total += currentPagePostCount;
     }
 
     console.log(
       `${new Date(posts[0].publish_time).toLocaleDateString()} -> ${new Date(
         posts[posts.length - 1].publish_time
-      ).toLocaleDateString()} (${currentPagePostCount} posts found)`
+      ).toLocaleDateString()} (${currentPagePostCount} posts found, ${total} total)`
     );
 
     await loadNextPostsFromTimeline(page);
-  } while (!isStarted || currentPagePostCount > 0);
+  } while (total === 0 || currentPagePostCount > 0);
 
   await browser.close();
 })();
