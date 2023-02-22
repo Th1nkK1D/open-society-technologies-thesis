@@ -30,11 +30,99 @@ clean_data <- data %>%
   filter(publish_time < end_date*1000, !is.na(text)) %>%
   arrange(desc(publish_time)) %>%
   mutate(date = as.Date.POSIXct(publish_time/1000)) %>%
-  separate(date, c('year', 'month', 'date'), '-', remove = TRUE, convert = TRUE) %>%
-  mutate(text = gsub('\n', '', text, fixed = TRUE)) %>%
+  separate(date, c('year', 'month', 'day'), '-', remove = TRUE, convert = TRUE) %>%
+  select(-year) %>%
   rename(timestamp = publish_time, attachment = ent_attachement_type) %>%
-  relocate(timestamp, .after = date) %>%
+  mutate(text = gsub('\n', '', text, fixed = TRUE), attachment = gsub('Attachment', '', attachment, fixed = TRUE)) %>%
+  relocate(timestamp, .after = day) %>%
   relocate(text, attachment, .after = timestamp)
 
 clean_data
+```
+
+# EDA
+
+## Group
+
+
+```{r}
+clean_data %>%
+  group_by(group) %>%
+  count() %>%
+ggplot(aes(x = reorder(group, -n), y = n, label = n)) +
+  geom_bar(stat = 'identity') +
+  geom_text(vjust = -0.2) +
+  labs(
+    title = 'Number of posts from each group',
+    x = 'Facebook group',
+    y = 'Number of posts')
+```
+
+## Published month
+
+```{r}
+clean_data %>%
+  group_by(month) %>%
+  count() %>%
+  summary()
+```
+
+```{r}
+ggplot(clean_data, aes(x = as.factor(month), fill = group)) +
+  geom_bar() +
+  labs(
+    title = 'Number of posts in each month',
+    x = 'Month',
+    y = 'Number of posts',
+    fill = 'Group')
+```
+
+## Text
+
+```{r}
+summary(nchar(clean_data$text))
+```
+
+
+```{r}
+ggplot(clean_data, aes(x = nchar(text))) +
+  geom_histogram(bins = 40) +
+  labs(
+    title = 'Text length distribution',
+    x = 'Text length',
+    y = 'Number of posts')
+```
+```{r}
+ggplot(clean_data, aes(y = nchar(text))) +
+  geom_boxplot() +
+  labs(
+    title = 'Text length distribution in each Facebook group',
+    y = 'Text length',
+    x = 'Number of posts') +
+  facet_wrap('group')
+```
+
+```{r}
+clean_data %>%
+  mutate(attachment = replace_na(attachment, 'No attachment')) %>%
+  group_by(attachment) %>%
+  count() %>%
+ggplot(aes(x = n, y = reorder(attachment, n), label = n )) +
+  geom_bar(stat = 'identity') +
+  geom_text(size = 2.5, hjust = -0.1) +
+  labs(
+    title = 'Number of posts by attachment type',
+    y = 'Attachment type',
+    x = 'Number of posts')
+```
+
+```{r}
+clean_data %>%
+  mutate(attachment = replace_na(attachment, 'No attachment')) %>%
+ggplot(aes(x = nchar(text), y = reorder(attachment, attachment, length))) +
+  geom_boxplot() +
+  labs(
+    title = 'Attachment type and text length of posts',
+    y = 'Attachment type',
+    x = 'Text length')
 ```
