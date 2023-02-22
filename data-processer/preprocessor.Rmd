@@ -1,0 +1,40 @@
+---
+title: "Preprocessor"
+output: html_notebook
+---
+
+```{r}
+renv::activate()
+library(tidyverse)
+```
+
+# Load data
+
+```{r}
+data <- bind_rows(
+  read_csv('../facebook-scraper/out/166477880066544_12323_201129.csv') %>% mutate(group = 'Expats in Tallinn/Estonia'),
+  read_csv('../facebook-scraper/out/1395659303995885_12323_203310.csv') %>% mutate(group = 'Expats in Tallinn, Estonia'),
+  read_csv('../facebook-scraper/out/ExpatsEstonia_12323_204417.csv') %>% mutate(group = 'Expats & Foreigners in Estonia')
+)
+
+data
+```
+
+# Clean the data
+
+```{r}
+end_date <- as.numeric(as.POSIXct("2023-01-01", format="%Y-%m-%d"))
+
+clean_data <- data %>%
+  select(-top_level_post_id, -actor_id) %>%
+  filter(publish_time < end_date*1000, !is.na(text)) %>%
+  arrange(desc(publish_time)) %>%
+  mutate(date = as.Date.POSIXct(publish_time/1000)) %>%
+  separate(date, c('year', 'month', 'date'), '-', remove = TRUE, convert = TRUE) %>%
+  mutate(text = gsub('\n', '', text, fixed = TRUE)) %>%
+  rename(timestamp = publish_time, attachment = ent_attachement_type) %>%
+  relocate(timestamp, .after = date) %>%
+  relocate(text, attachment, .after = timestamp)
+
+clean_data
+```
