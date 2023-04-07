@@ -40,6 +40,7 @@ clean_data <- data %>%
 clean_data
 ```
 
+
 # EDA
 
 ## Group
@@ -125,4 +126,13 @@ ggplot(aes(x = nchar(text), y = reorder(attachment, attachment, length))) +
     title = 'Attachment type and text length of posts',
     y = 'Attachment type',
     x = 'Text length')
+```
+
+# Write output
+
+```{r}
+clean_data %>%
+  select(-attachment) %>%
+  distinct(text, .keep_all = TRUE) %>%
+  write_csv('cleaned_data.csv')
 ```
