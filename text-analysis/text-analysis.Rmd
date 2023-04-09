@@ -1,0 +1,51 @@
+---
+title: "Text Analysis"
+output: html_notebook
+---
+
+
+```{r}
+library('tidyverse')
+```
+
+# Read data
+
+```{r}
+raw_data <- read_csv('../data-processer/cleaned_data.csv')
+raw_data
+```
+
+```{r}
+sentiment_data <- read_csv('sentiment_output.csv')
+sentiment_data
+```
+
+```{r}
+topic_data <- read_csv('topic-label-output.csv')
+topic_data
+```
+
+# Join data
+
+```{r}
+data <- raw_data %>%
+  mutate(index = seq(0, as.numeric(count(raw_data)[1]-1))) %>%
+  left_join(topic_data, by = c('index' = '...1')) %>%
+  left_join(sentiment_data, by = c('index' = '...1')) %>%
+  select(text, month, day, timestamp, Name, Top_n_words, label) %>%
+  mutate(across(Name, ~ ifelse(startsWith(.x, '-1'), NA, .x))) %>%
+  rename(topic = Name, sentiment = label, top_words = Top_n_words)
+
+data
+```
+
+```{r}
+data %>%
+  group_by(topic) %>%
+  count() %>%
+  arrange(desc(n))
+```
+
+```{r}
+write_csv(data, 'labeled-data.csv')
+```
