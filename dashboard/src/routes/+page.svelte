@@ -1,12 +1,12 @@
 <script lang="ts">
+	import TopicsChart from '../components/topics-chart.svelte';
 	import { loadPosts } from '../utils/posts';
 </script>
 
 <div>
-	<h1 class="text-2xl">Topic Trend</h1>
 	{#await loadPosts()}
-		Loading
+		Loading...
 	{:then posts}
-		{JSON.stringify(posts[0])}
+		<TopicsChart {posts} />
 	{/await}
 </div>
