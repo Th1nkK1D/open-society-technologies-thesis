@@ -1,2 +1,12 @@
-<h1 class="text-2xl">Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import { loadPosts } from '../utils/posts';
+</script>
+
+<div>
+	<h1 class="text-2xl">Topic Trend</h1>
+	{#await loadPosts()}
+		Loading
+	{:then posts}
+		{JSON.stringify(posts[0])}
+	{/await}
+</div>
