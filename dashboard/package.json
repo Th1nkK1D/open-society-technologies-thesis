@@ -37,6 +37,7 @@
 	"dependencies": {
 		"@unovis/svelte": "^1.0.3",
 		"@unovis/ts": "^1.0.3",
-		"d3-fetch": "^3.0.1"
+		"d3-fetch": "^3.0.1",
+		"d3-scale-chromatic": "^3.0.0"
 	}
 }

@@ -16,7 +16,7 @@ export interface Post {
 	sentimentConfident: number;
 }
 
-export async function loadPosts() {
+export async function loadPosts(): Promise<Post[]> {
 	return csv<Post>(`${base}/data/posts.csv`, {}, (d) => ({
 		text: d.text as string,
 		timestamp: new Date(+(d.timestamp as string)),
