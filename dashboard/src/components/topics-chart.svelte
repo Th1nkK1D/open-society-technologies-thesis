@@ -1,11 +1,26 @@
 <script lang="ts">
 	import { VisXYContainer, VisLine, VisAxis, VisCrosshair, VisTooltip } from '@unovis/svelte';
-	import { Line } from '@unovis/ts';
+	import { CurveType, Line } from '@unovis/ts';
 	import type { Post } from '../utils/posts';
 	import type { Topic } from '../utils/topics';
 
 	const MAX_CHART_TOPIC = 20;
 	const MAX_TOOLTIP_TOPIC = 5;
+
+	const MONTHS = [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December'
+	];
 
 	export let posts: Post[];
 	export let topics: Topic[];
@@ -15,7 +30,7 @@
 		topics: { [key: number]: number };
 	}
 
-	$: topicCountByMonth = [...Array(12).keys()].map((month) =>
+	$: topicCountByMonth = [...Array(MONTHS.length).keys()].map((month) =>
 		posts
 			.filter(({ timestamp }) => timestamp.getMonth() === month)
 			.reduce<TopicGroup>(
@@ -42,13 +57,15 @@
 
 	const color = (d: TopicGroup, topicIndex: number) => topics[topicIndex + 1].color;
 
+	const tickFormat = (index: number) => MONTHS[index].slice(0, 3);
+
 	const template = (d: TopicGroup) =>
 		[
-			`<b>${d.month}</b>`,
+			`<b>${MONTHS[d.month]}</b>`,
 			...Object.entries(d.topics)
 				.sort((a, z) => z[1] - a[1])
 				.slice(1, MAX_TOOLTIP_TOPIC + 1)
-				.map(([topicIndex, count]) => `${getTopicLabelElement(topics[+topicIndex + 1])}: ${count}`)
+				.map(([topicIndex, count]) => `${getTopicLabelElement(topics[+topicIndex + 1])} (${count})`)
 		].join('<br/>');
 
 	const triggers = {
@@ -61,9 +78,9 @@
 </script>
 
 <VisXYContainer data={topicCountByMonth} height="500">
-	<VisLine {x} {y} {color} highlightOnHover />
-	<VisAxis type="x" />
-	<VisAxis type="y" />
+	<VisLine {x} {y} {color} curveType={CurveType.Linear} highlightOnHover />
+	<VisAxis type="x" label="Month" numTicks={MONTHS.length} {tickFormat} />
+	<VisAxis type="y" label="Number of Posts" />
 	<VisCrosshair {template} />
 	<VisTooltip {triggers} />
 </VisXYContainer>
