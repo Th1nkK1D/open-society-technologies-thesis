@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { VisXYContainer, VisLine, VisAxis, VisCrosshair, VisTooltip } from '@unovis/svelte';
 	import { CurveType, Line } from '@unovis/ts';
-	import type { Post } from '../utils/posts';
-	import type { Topic } from '../utils/topics';
+	import type { Post } from '../models/post';
+	import type { Topic } from '../models/topic';
 
 	const MAX_TOOLTIP_TOPIC = 5;
 

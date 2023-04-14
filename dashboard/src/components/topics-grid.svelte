@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Sentiment, type Post } from '../utils/posts';
-	import type { Topic } from '../utils/topics';
+	import { type Post, Sentiment } from '../models/post';
+	import type { Topic } from '../models/topic';
 
 	const SENTIMENT_COLORS = ['bg-green-500', 'bg-base-300', 'bg-red-500'];
 

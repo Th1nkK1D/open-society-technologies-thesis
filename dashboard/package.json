@@ -15,6 +15,7 @@
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
 		"@types/d3-fetch": "^3.0.2",
+		"@types/node": "^18.15.11",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.7",
@@ -37,7 +38,7 @@
 	"dependencies": {
 		"@unovis/svelte": "^1.0.3",
 		"@unovis/ts": "^1.0.3",
-		"d3-fetch": "^3.0.1",
+		"d3-dsv": "^3.0.1",
 		"d3-scale-chromatic": "^3.0.0",
 		"daisyui": "^2.51.5"
 	}
