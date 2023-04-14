@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { type Post, Sentiment } from '../models/post';
+	import { type Post, SENTIMENTS } from '../models/post';
 	import type { Topic } from '../models/topic';
 
 	const SENTIMENT_COLORS = ['bg-green-500', 'bg-blue-500', 'bg-red-500'];
@@ -9,7 +9,7 @@
 	export let posts: Post[];
 
 	$: topicGroup = topics.map((topic) => {
-		const sentiments = Object.values(Sentiment).map(
+		const sentiments = SENTIMENTS.map(
 			(s) =>
 				posts.filter(({ topicId, sentiment }) => topicId === topic.id && sentiment === s).length
 		);

@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { VisXYContainer, VisArea, VisAxis, VisCrosshair, VisTooltip } from '@unovis/svelte';
 	import { CurveType } from '@unovis/ts';
-	import { Sentiment, type Post } from '../models/post';
+	import { Sentiment, type Post, SENTIMENTS } from '../models/post';
 	import { MONTHS, tickFormat } from '../utils/chart';
-
-	const SENTIMENTS = [Sentiment.Negative, Sentiment.Neutral, Sentiment.Positive];
 
 	export let posts: Post[];
 
@@ -44,7 +42,7 @@
 	);
 
 	$: color = (d: SentimentGroup, index: number) =>
-		['rgb(239, 68, 68)', 'rgb(59, 130, 246)', 'rgb(34, 197, 94)'][index];
+		['rgb(34, 197, 94)', 'rgb(59, 130, 246)', 'rgb(239, 68, 68)'][index];
 
 	$: template = (d: SentimentGroup) =>
 		[
