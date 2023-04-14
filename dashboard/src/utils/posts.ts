@@ -12,8 +12,8 @@ export interface Post {
 	timestamp: Date;
 	topicId: number;
 	sentiment: Sentiment;
-	topicConfident: number;
-	sentimentConfident: number;
+	topicConfidence: number;
+	sentimentConfidence: number;
 }
 
 export async function loadPosts(): Promise<Post[]> {
@@ -22,7 +22,7 @@ export async function loadPosts(): Promise<Post[]> {
 		timestamp: new Date(+(d.timestamp as string)),
 		topicId: +(d.topicId as string),
 		sentiment: d.sentiment as Sentiment,
-		topicConfident: +(d.topicConfident as string),
-		sentimentConfident: +(d.sentimentConfident as string)
+		topicConfidence: +(d.topicConfidence as string),
+		sentimentConfidence: +(d.sentimentConfidence as string)
 	}));
 }

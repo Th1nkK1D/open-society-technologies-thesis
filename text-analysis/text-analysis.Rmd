@@ -34,8 +34,8 @@ data <- raw_data %>%
   left_join(sentiment_data, by = c('index' = '...1')) %>%
   select(text, timestamp, Topic, Probability, label, score) %>%
   mutate(
-    topicConfident = format(round(Probability, 2), nsmall = 2),
-    sentimentConfident = format(round(as.numeric(score), 2), nsmall = 2),
+    topicConfidence = format(round(Probability, 2), nsmall = 2),
+    sentimentConfidence = format(round(as.numeric(score), 2), nsmall = 2),
     .keep = "unused"
   ) %>%
   rename(topicId = Topic, sentiment = label)
@@ -47,13 +47,4 @@ data
 write_csv(data, '../dashboard/static/data/posts.csv')
 ```
 
-```{r}
-topic_by_month <- data %>%
-  group_by(month, topicId) %>%
-  count() %>%
-  arrange(month, topicId) %>%
-  rename(count = n)
-
-topic_by_month
-```
 

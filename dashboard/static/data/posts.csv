@@ -1,4 +1,4 @@
-text,timestamp,topicId,sentiment,topicConfident,sentimentConfident
+text,timestamp,topicId,sentiment,topicConfidence,sentimentConfidence
 "Hi, Is it true that freezing car registration for two months for example extends technical inspection for two months further than end? Or it's just nonsense? Thank you 😌",1672518833000,65,Neutral,0.88,0.52
 "A table for sale, pm if interested! https://www.facebook.com/marketplace/item/919417389422984/",1672511471000,46,Neutral,0.50,0.60
 "If you're looking to welcome the new year with 20-40 other expats in the Old Town bar called Shimo and then the Freedom Square light show at midnight, we have created a chat amongst the Daily Expat Meetups community. Let me know if you'd like to join. There we will location share, so you could find us :)  There's also a Meetup, but it's a bit more difficult to coordinate finding each other compared to the Facebook chat. Still, feel free to rsvp ;)",1672503037000,-1,Positive,0.00,0.74
