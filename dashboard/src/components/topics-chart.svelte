@@ -3,23 +3,9 @@
 	import { CurveType, Line } from '@unovis/ts';
 	import type { Post } from '../models/post';
 	import type { Topic } from '../models/topic';
+	import { MONTHS, tickFormat } from '../utils/chart';
 
 	const MAX_TOOLTIP_TOPIC = 5;
-
-	const MONTHS = [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December'
-	];
 
 	export let posts: Post[];
 	export let topics: Topic[];
@@ -55,8 +41,6 @@
 	);
 
 	$: color = (d: TopicGroup, topicId: number) => topics.find(({ id }) => id === topicId)?.color;
-
-	const tickFormat = (index: number) => MONTHS[index].slice(0, 3);
 
 	$: template = (d: TopicGroup) =>
 		[
