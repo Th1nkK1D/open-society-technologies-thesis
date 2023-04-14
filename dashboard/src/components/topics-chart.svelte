@@ -4,7 +4,6 @@
 	import type { Post } from '../utils/posts';
 	import type { Topic } from '../utils/topics';
 
-	const MAX_CHART_TOPIC = 20;
 	const MAX_TOOLTIP_TOPIC = 5;
 
 	const MONTHS = [
@@ -25,62 +24,64 @@
 	export let posts: Post[];
 	export let topics: Topic[];
 
+	type TopicCountMap = { [key: number]: number };
+
 	interface TopicGroup {
 		month: number;
-		topics: { [key: number]: number };
+		topics: TopicCountMap;
 	}
 
-	$: topicCountByMonth = [...Array(MONTHS.length).keys()].map((month) =>
+	$: topicCountByMonth = [...MONTHS.keys()].map((month) =>
 		posts
 			.filter(({ timestamp }) => timestamp.getMonth() === month)
 			.reduce<TopicGroup>(
 				(obj, { topicId }) => {
-					if (!obj.topics[topicId]) {
-						obj.topics[topicId] = 1;
-					} else {
+					if (topicId in obj.topics) {
 						obj.topics[topicId]++;
 					}
 
 					return obj;
 				},
-				{ month, topics: {} }
+				{ month, topics: topics.reduce<TopicCountMap>((obj, { id }) => ({ ...obj, [id]: 0 }), {}) }
 			)
 	);
 
 	const x = ({ month }: TopicGroup) => month;
 
-	const y = topics.slice(1, MAX_CHART_TOPIC + 1).map(
+	$: y = topics.map(
 		({ id }) =>
 			({ topics }: TopicGroup) =>
 				topics[id]
 	);
 
-	const color = (d: TopicGroup, topicIndex: number) => topics[topicIndex + 1].color;
+	$: color = (d: TopicGroup, topicId: number) => topics.find(({ id }) => id === topicId)?.color;
 
 	const tickFormat = (index: number) => MONTHS[index].slice(0, 3);
 
-	const template = (d: TopicGroup) =>
+	$: template = (d: TopicGroup) =>
 		[
 			`<b>${MONTHS[d.month]}</b>`,
 			...Object.entries(d.topics)
 				.sort((a, z) => z[1] - a[1])
-				.slice(1, MAX_TOOLTIP_TOPIC + 1)
-				.map(([topicIndex, count]) => `${getTopicLabelElement(topics[+topicIndex + 1])} (${count})`)
+				.slice(0, MAX_TOOLTIP_TOPIC)
+				.map(([topicId, count]) => `${getTopicLabelElementById(+topicId)} (${count})`)
 		].join('<br/>');
 
-	const triggers = {
-		[Line.selectors.line]: (d: TopicGroup, topicIndex: number) =>
-			`<b>${getTopicLabelElement(topics[topicIndex + 1])}</b>`
+	$: triggers = {
+		[Line.selectors.line]: (d: TopicGroup, topicId: number) =>
+			`<b>${getTopicLabelElementById(topicId)}</b>`
 	};
 
-	const getTopicLabelElement = ({ label, color }: Topic) =>
-		`<span style="color: ${color};">&bull;</span> ${label}`;
+	$: getTopicLabelElementById = (topicId: number) => {
+		const topic = topics.find(({ id }) => id === topicId);
+		return topic ? `<span style="color: ${topic.color};">&bull;</span> ${topic.label}` : '';
+	};
 </script>
 
 <VisXYContainer data={topicCountByMonth} height="500">
 	<VisLine {x} {y} {color} curveType={CurveType.Linear} highlightOnHover />
 	<VisAxis type="x" label="Month" numTicks={MONTHS.length} {tickFormat} />
 	<VisAxis type="y" label="Number of Posts" />
-	<VisCrosshair {template} />
+	<VisCrosshair {template} {color} />
 	<VisTooltip {triggers} />
 </VisXYContainer>
