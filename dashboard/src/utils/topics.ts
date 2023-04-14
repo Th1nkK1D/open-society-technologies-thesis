@@ -1,6 +1,6 @@
 import { csv } from 'd3-fetch';
 import { base } from '$app/paths';
-import { interpolateTurbo } from 'd3-scale-chromatic';
+import { schemeTableau10 } from 'd3-scale-chromatic';
 
 export interface Topic {
 	id: number;
@@ -16,6 +16,6 @@ export async function loadTopics(): Promise<Topic[]> {
 	return [{ label: 'Uncetagorized' }, ...topics].map(({ label }, i) => ({
 		id: i - 1,
 		label: label.replaceAll('_', ', '),
-		color: interpolateTurbo(Math.random())
+		color: schemeTableau10[i % schemeTableau10.length]
 	}));
 }
