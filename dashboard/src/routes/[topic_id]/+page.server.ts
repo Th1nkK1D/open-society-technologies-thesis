@@ -11,7 +11,7 @@ export function load({ params }) {
 	return {
 		posts: loadPosts().filter((post) => post.topicId === topicId),
 		topic: loadTopics().find(({ id }) => id === topicId) as Topic,
-		representedWords: topicRepresentatives[topicId + 1].map(([word, value]) => [
+		representativeWords: topicRepresentatives[topicId + 1].map(([word, value]) => [
 			word,
 			Math.round(+value * WORDCLOUD_SIZE_MULTIPLIER)
 		])

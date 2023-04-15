@@ -13,7 +13,7 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	const { topic, posts, representedWords } = data;
+	const { topic, posts, representativeWords } = data;
 </script>
 
 <div class="space-y-12">
@@ -22,8 +22,8 @@
 	</h1>
 
 	<div class="space-y-6">
-		<h2 class="text-xl font-bold">Represented words</h2>
-		<Wordcloud list={representedWords} />
+		<h2 class="text-xl font-bold">Representative words</h2>
+		<Wordcloud list={representativeWords} />
 	</div>
 
 	<div class="space-y-6">
