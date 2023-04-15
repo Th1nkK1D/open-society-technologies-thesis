@@ -32,10 +32,10 @@
 		>
 			<div class="card-body flex flex-row px-4 py-2 items-center">
 				<span class="h-4 w-4 rounded-full" style="background-color: {color};" />
-				<h2 class="card-title">
+				<h2 class="card-title flex-1">
 					{label}
 				</h2>
-				<p>{total} posts</p>
+				<p class="text-center">{total} posts</p>
 				<div class="flex flex-col text-xs space-y-1 w-64">
 					<div class="flex flex-row">
 						<span class=" text-green-500">{Math.round(sentimentPercentages[0])}%</span>
