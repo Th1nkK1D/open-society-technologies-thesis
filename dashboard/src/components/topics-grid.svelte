@@ -22,7 +22,7 @@
 	});
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-red">
+<div class="flex flex-col gap-4 bg-red">
 	{#each topicGroup as { id, label, color, total, sentiments } (id)}
 		{@const sentimentPercentages = sentiments.map((count) => (count * 100) / total)}
 
@@ -30,25 +30,22 @@
 			href="{base}/{id}"
 			class="card bg-base-200 hover:bg-base-300 rounded border border-base-300 shadow"
 		>
-			<div class="card-body">
-				<span class="card-title" style="color: {color};">#{id}</span>
+			<div class="card-body flex flex-row px-4 py-2 items-center">
+				<span class="h-4 w-4 rounded-full" style="background-color: {color};" />
 				<h2 class="card-title">
 					{label}
 				</h2>
 				<p>{total} posts</p>
-				<div class="flex flex-col text-xs space-y-1">
+				<div class="flex flex-col text-xs space-y-1 w-64">
 					<div class="flex flex-row">
-						<span class="flex-1 text-green-500">{Math.round(sentimentPercentages[0])}%</span>
+						<span class=" text-green-500">{Math.round(sentimentPercentages[0])}%</span>
+						<span class="flex-1 text-center">Sentiment</span>
 						<span class="text-red-500">{Math.round(sentimentPercentages[2])}%</span>
 					</div>
 					<div class="flex flex-row bg-base-200 rounded-full h-2 overflow-hidden">
 						{#each sentimentPercentages as percentage, index}
 							<div class={SENTIMENT_COLORS[index]} style="width: {percentage}%" />
 						{/each}
-					</div>
-					<div class="flex flex-row text-gray-400">
-						<span class="flex-1">Positive</span>
-						<span>Negative</span>
 					</div>
 				</div>
 			</div>

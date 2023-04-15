@@ -10,7 +10,7 @@
 
 	const { posts } = data;
 
-	const topics = data.topics.slice(0, MAX_DISPLAY_TOPIC + 1);
+	const topics = data.topics.slice(0, MAX_DISPLAY_TOPIC);
 </script>
 
 <h1 class="font-sans font-bold text-4xl">
