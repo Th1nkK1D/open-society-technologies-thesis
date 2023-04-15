@@ -9,10 +9,13 @@
 </script>
 
 <h1 class="font-sans font-bold text-3xl">
-	<span style="color: {topic.color}">Topic #{topic.id}</span>
-	{topic.label}
+	Topic: {topic.label}
 </h1>
 
-{#if browser}
-	<SentimentsChart {posts} />
-{/if}
+<div class="space-y-6">
+	<h2 class="text-xl font-bold text-center">Sentiment toward the topic</h2>
+
+	{#if browser}
+		<SentimentsChart {posts} />
+	{/if}
+</div>

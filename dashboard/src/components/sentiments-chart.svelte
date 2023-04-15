@@ -1,8 +1,17 @@
 <script lang="ts">
-	import { VisXYContainer, VisArea, VisAxis, VisCrosshair, VisTooltip } from '@unovis/svelte';
+	import {
+		VisXYContainer,
+		VisArea,
+		VisAxis,
+		VisCrosshair,
+		VisTooltip,
+		VisBulletLegend
+	} from '@unovis/svelte';
 	import { CurveType } from '@unovis/ts';
 	import { Sentiment, type Post, SENTIMENTS } from '../models/post';
 	import { MONTHS, tickFormat } from '../utils/chart';
+
+	const SENTIMENTS_COLOR = ['rgb(34, 197, 94)', 'rgb(59, 130, 246)', 'rgb(239, 68, 68)'];
 
 	export let posts: Post[];
 
@@ -41,8 +50,9 @@
 				sentiments[sentiment]
 	);
 
-	$: color = (d: SentimentGroup, index: number) =>
-		['rgb(34, 197, 94)', 'rgb(59, 130, 246)', 'rgb(239, 68, 68)'][index];
+	$: color = (d: SentimentGroup, index: number) => SENTIMENTS_COLOR[index];
+
+	const items = SENTIMENTS.map((name, index) => ({ name, color: SENTIMENTS_COLOR[index] }));
 
 	$: template = (d: SentimentGroup) =>
 		[
@@ -51,10 +61,14 @@
 		].join('<br/>');
 </script>
 
-<VisXYContainer data={topicCountByMonth} height="500">
-	<VisArea {x} {y} {color} curveType={CurveType.Linear} highlightOnHover />
-	<VisAxis type="x" label="Month" numTicks={MONTHS.length} {tickFormat} />
-	<VisAxis type="y" label="Number of Posts" />
-	<VisCrosshair {color} {template} />
-	<VisTooltip />
-</VisXYContainer>
+<div class="space-y-2">
+	<VisXYContainer data={topicCountByMonth} height="300">
+		<VisArea {x} {y} {color} curveType={CurveType.Linear} />
+		<VisAxis type="x" label="Month" numTicks={MONTHS.length} {tickFormat} />
+		<VisAxis type="y" label="Number of Posts" />
+		<VisCrosshair {color} {template} />
+		<VisTooltip />
+	</VisXYContainer>
+
+	<VisBulletLegend {items} />
+</div>
