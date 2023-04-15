@@ -811,6 +811,11 @@
     "@types/topojson-simplify" "*"
     "@types/topojson-specification" "*"
 
+"@types/wordcloud@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/wordcloud/-/wordcloud-1.2.0.tgz#63c330c4465425b943e1eb1364915191db661772"
+  integrity sha512-s6wZ7eIi+CBSdsjZwp0yVmL8G8+Eo1vumv/NVUjRtClGtxx+o1S74+PbYZmqp7hAIvRcOazdviQ6qeijxuXfKw==
+
 "@typescript-eslint/eslint-plugin@^5.45.0":
   version "5.57.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.57.1.tgz#d1ab162a3cd2671b8a1c9ddf6e2db73b14439735"
@@ -3122,6 +3127,11 @@ word-wrap@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
+
+wordcloud@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/wordcloud/-/wordcloud-1.2.2.tgz#2d32a99d8ac6a54d8b56915be1d41928f205854d"
+  integrity sha512-fUnDsGrHXou+49j1OeKaC7nOeZPx+sWjIet0L/j6eAcm0nXy+a+AuUs/iDAX4PLBg1Zc6wgXWXhoXdQsXRWAEw==
 
 wrappy@1:
   version "1.0.2"
