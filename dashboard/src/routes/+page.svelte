@@ -17,15 +17,4 @@
 	<TopicsChart {posts} {topics} />
 {/if}
 
-<div class="space-y-4 mt-4">
-	<div class="flex flex-row items-center justify-end space-x-4">
-		<span>Order by</span>
-		<select class="select select-bordered">
-			<option disabled selected>Higest number of posts</option>
-			<option>Most positive topic</option>
-			<option>Most negative topic</option>
-		</select>
-	</div>
-
-	<TopicsGrid {posts} {topics} />
-</div>
+<TopicsGrid {posts} {topics} />
