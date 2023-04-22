@@ -3,14 +3,10 @@
 	import TopicsChart from '../components/topics-chart.svelte';
 	import TopicsGrid from '../components/topics-grid.svelte';
 
-	const MAX_DISPLAY_TOPIC = 20;
-
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	const { posts } = data;
-
-	const topics = data.topics.slice(0, MAX_DISPLAY_TOPIC);
+	const { MAX_DISPLAY_TOPIC, topics, posts } = data;
 </script>
 
 <h1 class="font-sans font-bold text-4xl mb-12">
